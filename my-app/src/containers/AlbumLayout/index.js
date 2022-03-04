@@ -4,6 +4,7 @@ import Box from "@material-ui/core/Box";
 import HeaderAlbum from "./Header/Header";
 import BodyAlbum from "./Body";
 import Footer from "./Footer/Footer";
+
 export default function AlbumLayout() {
   return (
     <Box>
