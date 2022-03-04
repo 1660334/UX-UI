@@ -24,9 +24,6 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     color: "#2196f3",
-    padding: theme.spacing(9),
-    marginLeft: theme.spacing(10),
-    marginRight: theme.spacing(10),
   },
   field: {
     marginBottom: theme.spacing(2),
