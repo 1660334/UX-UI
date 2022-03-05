@@ -15,10 +15,6 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    minWidth: 345,
-  },
-
   media: {
     height: 200,
   },
@@ -75,7 +71,7 @@ export default function ImgMediaCard(props) {
       >
         <DialogTitle id="form-dialog-title">Add to Card</DialogTitle>
         <DialogContent>
-          <Card className={classes.root}>
+          <Card>
             <CardActionArea className={classes.area}>
               <CardMedia
                 className={classes.media}
@@ -83,7 +79,7 @@ export default function ImgMediaCard(props) {
                 title="Add link Image"
               >
                 <input
-                  accept="/Users/huynhluan/Downloads/home"
+                  // accept="/Users/huynhluan/Downloads/home"
                   className={classes.input}
                   id="icon-button-file"
                   type="file"

@@ -9,7 +9,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import DataCard from "../../../../datacard/data.json";
-import Box from "@material-ui/core/Box";
+import DataImage from "../../../../dataimage/dataImage.json";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   media: {
-    height: 200,
+    height: 250,
     width: "100%",
   },
   text: {
@@ -27,52 +27,49 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function BodyTop(props) {
   const classes = useStyles();
-  const { setArr, filterArr, setFilterArr } = props;
+  const { arr, setArr, setArrImage } = props;
   useEffect(() => {
     setArr(DataCard); //truyền data từ file .json cho hàm setArr để thay đổi giá trị biến arr ban đầu khi reload
-    setFilterArr(DataCard);
+    setArrImage(DataImage);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   return (
-    <Box>
-      <Grid container spacing={4}>
-        {filterArr.map((item) => (
-          <Grid item xs={12} sm={6} md={4} key={item.id}>
-            <Card className={classes.root}>
-              <CardActionArea>
-                <CardMedia title="Contemplative Reptile">
-                  <img
-                    src={item.img}
-                    className={classes.media}
-                    alt="some value"
-                  />
-                </CardMedia>
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="h2">
-                    {item.title}
-                  </Typography>
-                  <Typography
-                    className={classes.text}
-                    variant="body2"
-                    color="textSecondary"
-                    component="p"
-                  >
-                    {item.text}
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-              <CardActions>
-                <Button size="small" color="primary">
-                  Share
-                </Button>
-                <Button size="small" color="primary">
-                  Learn More
-                </Button>
-              </CardActions>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-      {/* <Body arr={arr} setArr={setArr} /> */}
-    </Box>
+    <Grid container spacing={3}>
+      {arr.map((item) => (
+        <Grid item xs={12} sm={6} md={4} key={item.id}>
+          <Card className={classes.root}>
+            <CardActionArea>
+              <CardMedia title="Contemplative Reptile">
+                <img
+                  src={item.img}
+                  className={classes.media}
+                  alt="some value"
+                />
+              </CardMedia>
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="h2">
+                  {item.title}
+                </Typography>
+                <Typography
+                  className={classes.text}
+                  variant="body2"
+                  color="textSecondary"
+                  component="p"
+                >
+                  {item.text}
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+            <CardActions>
+              <Button size="small" color="primary">
+                Share
+              </Button>
+              <Button size="small" color="primary">
+                Learn More
+              </Button>
+            </CardActions>
+          </Card>
+        </Grid>
+      ))}
+    </Grid>
   );
 }

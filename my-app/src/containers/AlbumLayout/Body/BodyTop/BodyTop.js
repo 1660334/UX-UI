@@ -15,8 +15,10 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(3),
   },
 }));
-export default function BodyTop() {
+export default function BodyTop(props) {
   const classes = useStyles();
+  const { handleClickButtonCard, handleClickButtonImage } = props;
+
   return (
     <Box>
       <Typography align="center" variant="h2" className={classes.distanceTypo}>
@@ -29,13 +31,21 @@ export default function BodyTop() {
       </Typography>
       <Grid container spacing={2} justifyContent="center">
         <Grid item>
-          <Button variant="contained" color="primary">
-            MAIN CALL TO ACTION
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => handleClickButtonCard()}
+          >
+            ALBUM CARD
           </Button>
         </Grid>
         <Grid item>
-          <Button variant="outlined" color="primary">
-            SECONDARY ACTION
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => handleClickButtonImage()}
+          >
+            ALBUM IMAGES
           </Button>
         </Grid>
       </Grid>

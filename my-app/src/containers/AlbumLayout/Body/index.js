@@ -9,6 +9,7 @@ import BodyTop from "./BodyTop/BodyTop";
 import DialogAddCard from "./BodyCenter/Dialog/DialogAddCard";
 import BodyCenter from "./BodyCenter/BodyCenter";
 import DataCard from "../../../datacard/data.json";
+import ListImage from "./BodyCenter/BodyImage/ListImage";
 const useStyles = makeStyles((theme) => ({
   extendedIcon: {
     marginRight: theme.spacing(1),
@@ -26,9 +27,16 @@ export default function BodyAlbum() {
   const classes = useStyles();
 
   const [arr, setArr] = useState([]);
-  const [filterArr, setFilterArr] = useState([]);
+  const [arrImage, setArrImage] = useState([]);
   const [open, setOpen] = useState(false);
-
+  const [isClick, setIsClick] = useState(true);
+  console.log("isClick", isClick);
+  const handleClickButtonCard = () => {
+    setIsClick(true);
+  };
+  const handleClickButtonImage = () => {
+    setIsClick(false);
+  };
   const handleClickAddCard = () => {
     console.log("đã vào đây");
     setOpen(true);
@@ -45,7 +53,7 @@ export default function BodyAlbum() {
     console.log("data", newData);
     if (newData.img !== "" && newData.title !== "" && newData.text !== "") {
       setArr([...arr, newData]);
-      setFilterArr([...arr, newData]);
+
       setOpen(false);
     }
   };
@@ -54,28 +62,43 @@ export default function BodyAlbum() {
       <Grid item xs={12}>
         <Container maxWidth="sm">
           <Box pt={8} pb={4}>
-            <BodyTop />
+            <BodyTop
+              handleClickButtonCard={handleClickButtonCard}
+              handleClickButtonImage={handleClickButtonImage}
+            />
           </Box>
         </Container>
       </Grid>
       <Grid item xs={12}>
-        <Button
-          color="secondary"
-          variant="contained"
-          className={classes.button}
-          onClick={handleClickAddCard}
-        >
-          <AddIcon className={classes.extendedIcon} />
-          Add to Card
-        </Button>
+        {isClick === true ? (
+          <Button
+            color="secondary"
+            variant="contained"
+            className={classes.button}
+            onClick={handleClickAddCard}
+          >
+            <AddIcon className={classes.extendedIcon} />
+            Add Card
+          </Button>
+        ) : (
+          <Button
+            color="secondary"
+            variant="contained"
+            className={classes.button}
+            onClick={handleClickAddCard}
+          >
+            <AddIcon className={classes.extendedIcon} />
+            Add Images
+          </Button>
+        )}
+
         <Container maxWidth="md">
           <Box py={8}>
-            <BodyCenter
-              arr={arr}
-              setArr={setArr}
-              filterArr={filterArr}
-              setFilterArr={setFilterArr}
-            />
+            {isClick === true ? (
+              <BodyCenter arr={arr} setArr={setArr} setArrImage={setArrImage} />
+            ) : (
+              <ListImage arrImage={arrImage} />
+            )}
           </Box>
         </Container>
       </Grid>
