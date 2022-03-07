@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, Typography } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
@@ -14,13 +14,17 @@ const useStyles = makeStyles((theme) => ({
   extendedIcon: {
     marginRight: theme.spacing(1),
   },
-  button: {
+
+  div: {
     position: "sticky",
     top: "60%",
     bottom: theme.spacing(2),
-    left: "85%",
+    right: "85%",
     zIndex: 5,
     transform: "translate(-50, -50%)",
+  },
+  input: {
+    display: "none",
   },
 }));
 export default function BodyAlbum() {
@@ -41,7 +45,18 @@ export default function BodyAlbum() {
     console.log("đã vào đây");
     setOpen(true);
   };
+  const newImage = {
+    img: "",
 
+    id: arrImage.length + 1,
+  };
+  const handleAddImages = (url) => {
+    var data = URL.createObjectURL(url.target.files[0]);
+    newImage.img = data;
+    console.log("newImage", newImage);
+    setArrImage([...arrImage, newImage]);
+    console.log("arrImage", arrImage);
+  };
   const newData = {
     img: "",
     title: "",
@@ -71,25 +86,33 @@ export default function BodyAlbum() {
       </Grid>
       <Grid item xs={12}>
         {isClick === true ? (
-          <Button
-            color="secondary"
-            variant="contained"
-            className={classes.button}
-            onClick={handleClickAddCard}
-          >
-            <AddIcon className={classes.extendedIcon} />
-            Add Card
-          </Button>
+          <Typography align="right" component="div" className={classes.div}>
+            <Button
+              color="secondary"
+              variant="contained"
+              onClick={handleClickAddCard}
+            >
+              <AddIcon className={classes.extendedIcon} />
+              Add Card
+            </Button>
+          </Typography>
         ) : (
-          <Button
-            color="secondary"
-            variant="contained"
-            className={classes.button}
-            onClick={handleClickAddCard}
-          >
-            <AddIcon className={classes.extendedIcon} />
-            Add Images
-          </Button>
+          <Typography align="right" component="div" className={classes.div}>
+            <input
+              accept="image/*"
+              className={classes.input}
+              id="contained-button-file"
+              multiple
+              type="file"
+              onChange={(url) => handleAddImages(url)}
+            />
+            <label htmlFor="contained-button-file">
+              <Button color="secondary" variant="contained" component="span">
+                <AddIcon className={classes.extendedIcon} />
+                Upload
+              </Button>
+            </label>
+          </Typography>
         )}
 
         <Container maxWidth="md">
