@@ -9,6 +9,7 @@ import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import CloseIcon from "@material-ui/icons/Close";
 import Fab from "@material-ui/core/Fab";
+import { Box } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,43 +32,56 @@ const useStyles = makeStyles((theme) => ({
   },
 
   icons: {
+    backgroundColor: "#eceff1",
     [theme.breakpoints.down("sm")]: {
       width: theme.spacing(5),
       height: theme.spacing(5),
     },
     [theme.breakpoints.up("md")]: {
-      width: theme.spacing(7),
-      height: theme.spacing(7),
+      width: theme.spacing(6),
+      height: theme.spacing(6),
     },
     [theme.breakpoints.up("lg")]: {
-      width: theme.spacing(9),
-      height: theme.spacing(9),
+      width: theme.spacing(8),
+      height: theme.spacing(8),
     },
 
     color: "#f5f5f5",
   },
-  iconsDisabled: {
+  iconsSize: {
     [theme.breakpoints.down("sm")]: {
       width: theme.spacing(5),
       height: theme.spacing(5),
     },
     [theme.breakpoints.up("md")]: {
-      width: theme.spacing(7),
-      height: theme.spacing(7),
+      width: theme.spacing(6),
+      height: theme.spacing(6),
     },
     [theme.breakpoints.up("lg")]: {
-      width: theme.spacing(9),
-      height: theme.spacing(9),
+      width: theme.spacing(8),
+      height: theme.spacing(8),
     },
-
-    color: "#9e9e9e",
   },
   button: {
     position: "absolute",
-    left: "1%",
+    zIndex: 2,
+    left: "0%",
     top: "1%",
+    [theme.breakpoints.down("sm")]: {
+      width: theme.spacing(5),
+      height: theme.spacing(5),
+    },
+    [theme.breakpoints.up("md")]: {
+      width: theme.spacing(6),
+      height: theme.spacing(6),
+    },
+    [theme.breakpoints.up("lg")]: {
+      width: theme.spacing(8),
+      height: theme.spacing(8),
+    },
   },
-  imgBackdrop: { width: "100%", height: 500 },
+  imgBackdrop: { width: "100%", height: 700, zIndex: 1 },
+  boxgrid: { position: "absolute", top: "45%" },
   div: {
     position: "relative",
   },
@@ -97,7 +111,7 @@ export default function ListImage(props) {
     });
   }, [getId]); // eslint-disable-line react-hooks/exhaustive-deps
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={2}>
       {arrImage.map((item) => (
         <Grid item xs={12} sm={6} md={4} key={item.id}>
           <Card className={classes.root} onClick={() => handleToggle(item)}>
@@ -124,38 +138,68 @@ export default function ListImage(props) {
           <CloseIcon />
         </Fab>
         <div className={classes.div}>
-          {getId > 1 ? (
-            <IconButton
-              onClick={() => setGetId(getId - 1)}
-              className={classes.iconsbutton}
+          <Box>
+            <Grid
+              container
+              justifyContent="space-between"
+              className={classes.boxgrid}
             >
-              <KeyboardArrowLeftIcon className={classes.icons} />
-            </IconButton>
-          ) : (
-            <IconButton disabled>
-              <KeyboardArrowLeftIcon
-                color="disabled"
-                // className={classes.iconsDisabled}
-              />
-            </IconButton>
-          )}
+              <Grid item>
+                {getId > 1 ? (
+                  <IconButton
+                    color="default"
+                    aria-label="add"
+                    onClick={() => setGetId(getId - 1)}
+                    className={classes.icons}
+                  >
+                    <KeyboardArrowLeftIcon
+                      color="primary"
+                      className={classes.iconSize}
+                    />
+                  </IconButton>
+                ) : (
+                  <IconButton>
+                    <KeyboardArrowLeftIcon
+                      disabled
+                      color="disabled"
+                      className={classes.iconSize}
+                    />
+                  </IconButton>
+                )}
+              </Grid>
+              <Grid item>
+                {arrImage.length > getId ? (
+                  <IconButton
+                    color="default"
+                    aria-label="add"
+                    onClick={() => setGetId(getId + 1)}
+                    className={classes.icons}
+                  >
+                    <KeyboardArrowRightIcon
+                      color="primary"
+                      className={classes.iconSize}
+                    />
+                  </IconButton>
+                ) : (
+                  <IconButton className={classes.icons}>
+                    <KeyboardArrowRightIcon
+                      color="disabled"
+                      disabled
+                      className={classes.iconSize}
+                    />
+                  </IconButton>
+                )}
+              </Grid>
+            </Grid>
+          </Box>
 
-          <img src={getImg} alt="some value" className={classes.imgBackdrop} />
-          {arrImage.length > getId ? (
-            <IconButton onClick={() => setGetId(getId + 1)}>
-              <KeyboardArrowRightIcon
-                color="primary"
-                className={classes.iconsbutton}
-              />
-            </IconButton>
-          ) : (
-            <IconButton disabled>
-              <KeyboardArrowRightIcon
-                color="disabled"
-                // className={classes.iconsDisabled}
-              />
-            </IconButton>
-          )}
+          <Box>
+            <img
+              src={getImg}
+              alt="some value"
+              className={classes.imgBackdrop}
+            />
+          </Box>
         </div>
       </Backdrop>
     </Grid>

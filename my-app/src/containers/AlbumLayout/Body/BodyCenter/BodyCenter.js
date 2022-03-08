@@ -33,7 +33,7 @@ export default function BodyTop(props) {
     setArrImage(DataImage);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={2}>
       {arr.map((item) => (
         <Grid item xs={12} sm={6} md={4} key={item.id}>
           <Card className={classes.root}>
