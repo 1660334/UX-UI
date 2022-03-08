@@ -32,6 +32,7 @@ export default function BodyAlbum() {
 
   const [arr, setArr] = useState([]);
   const [arrImage, setArrImage] = useState([]);
+
   const [open, setOpen] = useState(false);
   const [isClick, setIsClick] = useState(true);
   console.log("isClick", isClick);
@@ -45,18 +46,35 @@ export default function BodyAlbum() {
     console.log("đã vào đây");
     setOpen(true);
   };
-  const newImage = {
-    img: "",
+  // const newImage = {
+  //   img: "",
 
-    id: arrImage.length + 1,
-  };
+  //   id: arrImage.length + 1,
+  // };
+
+  // const handleAddImages = (url) => {
+  //   var data = URL.createObjectURL(url.target.files[0]);
+  //   newImage.img = data;
+  //   console.log("url", url);
+  //   setArrImage([...arrImage, newImage]);
+  // };
   const handleAddImages = (url) => {
-    var data = URL.createObjectURL(url.target.files[0]);
-    newImage.img = data;
-    console.log("newImage", newImage);
-    setArrImage([...arrImage, newImage]);
-    console.log("arrImage", arrImage);
+    if (url.target.files) {
+      setArrImage([
+        ...arrImage,
+        ...[...url.target.files].map((item, index) => {
+          return {
+            img: URL.createObjectURL(item),
+            id: arrImage.length + index + 1,
+          };
+        }),
+      ]);
+    }
+
+    console.log(arrImage);
   };
+
+  console.log("arrImage", arrImage);
   const newData = {
     img: "",
     title: "",

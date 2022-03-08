@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
   media: {
     height: 300,
     width: "100%",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",
   },
   card: {
     height: 300,
@@ -80,7 +83,13 @@ const useStyles = makeStyles((theme) => ({
       height: theme.spacing(8),
     },
   },
-  imgBackdrop: { width: "100%", height: 700, zIndex: 1 },
+  imgBackdrop: {
+    width: "100%",
+    height: 600,
+    zIndex: 1,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  },
   boxgrid: { position: "absolute", top: "45%" },
   div: {
     position: "relative",
@@ -158,7 +167,7 @@ export default function ListImage(props) {
                     />
                   </IconButton>
                 ) : (
-                  <IconButton>
+                  <IconButton className={classes.icons}>
                     <KeyboardArrowLeftIcon
                       disabled
                       color="disabled"
