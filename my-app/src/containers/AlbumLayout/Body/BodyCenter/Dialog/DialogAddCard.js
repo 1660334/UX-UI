@@ -35,32 +35,64 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ImgMediaCard(props) {
-  const { open, setOpen, newData, handleAddCard } = props;
-  const [images, setImages] = useState();
+  const {
+    open,
+    setOpen,
+    newData,
+    handleAddCard,
+    isCheckClickButton,
+    getDataEdit,
+    newDataEditCard,
+  } = props;
+  const [images, setImages] = useState(null);
 
   const classes = useStyles();
-
+  const [imageEdit, setImageEdit] = useState();
   const hanldeDataUrlImg = (url) => {
-    var data = URL.createObjectURL(url.target.files[0]);
-    setImages(data);
-    handleDataAddCard(data, "img");
-    console.log("data", data);
+    if (isCheckClickButton === "Add") {
+      var data = URL.createObjectURL(url.target.files[0]);
+      setImages(data);
+      handleDataAddCard(data, "img");
+      console.log("data", data);
+    } else {
+      var dataEdit = URL.createObjectURL(url.target.files[0]);
+      setImageEdit(dataEdit);
+      handleDataAddCard(dataEdit, "img");
+      console.log("data", dataEdit);
+    }
   };
   const handleDataAddCard = (data, type) => {
-    if (data !== "" && type === "img") {
-      console.log("data", data);
-      newData.img = data;
-    }
-    if (data !== "" && type === "title") {
-      console.log("data", data);
-      newData.title = data;
-    }
-    if (data !== "" && type === "text") {
-      console.log("data", data);
-      newData.text = data;
-    }
+    if (isCheckClickButton === "Add") {
+      if (data !== "" && type === "img") {
+        console.log("data", data);
+        newData.img = data;
+      }
+      if (data !== "" && type === "title") {
+        console.log("data", data);
+        newData.title = data;
+      }
+      if (data !== "" && type === "text") {
+        console.log("data", data);
+        newData.text = data;
+      }
 
-    console.log("newData", newData);
+      console.log("newData", newData);
+    } else {
+      if (data !== "" && type === "img") {
+        console.log("data", data);
+        newDataEditCard.img = data;
+      }
+      if (data !== "" && type === "title") {
+        console.log("data", data);
+        newDataEditCard.title = data;
+      }
+      if (data !== "" && type === "text") {
+        console.log("data", data);
+        newDataEditCard.text = data;
+      }
+
+      console.log("newDataEditCard", newDataEditCard);
+    }
   };
   return (
     <div>
@@ -69,56 +101,120 @@ export default function ImgMediaCard(props) {
         onClose={() => setOpen(!open)}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Add to Card</DialogTitle>
-        <DialogContent>
-          <Card>
-            <CardActionArea className={classes.area}>
-              <CardMedia
-                className={classes.media}
-                image={images}
-                title="Add link Image"
-              >
-                <input
-                  // accept="/Users/huynhluan/Downloads/home"
-                  className={classes.input}
-                  id="icon-button-file"
-                  type="file"
-                  onChange={(url) => hanldeDataUrlImg(url)}
-                />
-                <label htmlFor="icon-button-file">
-                  <IconButton
-                    color="primary"
-                    component="span"
-                    aria-label="upload picture"
+        {isCheckClickButton === "Add" ? (
+          <>
+            <DialogTitle id="form-dialog-title">Add to Card</DialogTitle>
+            <DialogContent>
+              <Card>
+                <CardActionArea className={classes.area}>
+                  <CardMedia
+                    className={classes.media}
+                    image={images}
+                    title="Add link Image"
                   >
-                    <PhotoCamera className={classes.icon} />
-                  </IconButton>
-                </label>
-              </CardMedia>
-            </CardActionArea>
-            <CardContent>
-              <TextField
-                label="Tiêu đề"
-                type="text"
-                fullWidth
-                className={classes.field}
-                onChange={(event, data) => {
-                  handleDataAddCard(event.target.value, "title");
-                }}
-              />
-              <TextField
-                label="Nội dung"
-                type="text"
-                fullWidth
-                onChange={(event, data) => {
-                  handleDataAddCard(event.target.value, "text");
-                }}
-              />
-            </CardContent>
-          </Card>
-        </DialogContent>
+                    <input
+                      className={classes.input}
+                      id="icon-button-file"
+                      type="file"
+                      onChange={(url) => hanldeDataUrlImg(url)}
+                    />
+                    <label htmlFor="icon-button-file">
+                      <IconButton
+                        color="primary"
+                        component="span"
+                        aria-label="upload picture"
+                      >
+                        <PhotoCamera className={classes.icon} />
+                      </IconButton>
+                    </label>
+                  </CardMedia>
+                </CardActionArea>
+                <CardContent>
+                  <TextField
+                    label="Tiêu đề"
+                    type="text"
+                    fullWidth
+                    className={classes.field}
+                    onChange={(event, data) => {
+                      handleDataAddCard(event.target.value, "title");
+                    }}
+                  />
+                  <TextField
+                    label="Nội dung"
+                    type="text"
+                    fullWidth
+                    onChange={(event, data) => {
+                      handleDataAddCard(event.target.value, "text");
+                    }}
+                  />
+                </CardContent>
+              </Card>
+            </DialogContent>
+          </>
+        ) : (
+          <>
+            <DialogTitle id="form-dialog-title">Edit to Card</DialogTitle>
+            <DialogContent>
+              <Card>
+                <CardActionArea className={classes.area}>
+                  <CardMedia
+                    className={classes.media}
+                    image={getDataEdit.img}
+                    title="Edit link Image"
+                  >
+                    <input
+                      className={classes.input}
+                      id="icon-button-file"
+                      type="file"
+                      onChange={(url) => hanldeDataUrlImg(url)}
+                    />
+                    <label htmlFor="icon-button-file">
+                      <IconButton
+                        color="primary"
+                        component="span"
+                        aria-label="upload picture"
+                      >
+                        <PhotoCamera className={classes.icon} />
+                      </IconButton>
+                    </label>
+                  </CardMedia>
+                </CardActionArea>
+                <CardContent>
+                  <TextField
+                    label="Tiêu đề"
+                    type="text"
+                    defaultValue={getDataEdit.title}
+                    fullWidth
+                    className={classes.field}
+                    onChange={(event, data) => {
+                      handleDataAddCard(event.target.value, "title");
+                    }}
+                  />
+                  <TextField
+                    label="Nội dung"
+                    type="text"
+                    defaultValue={getDataEdit.text}
+                    fullWidth
+                    onChange={(event, data) => {
+                      handleDataAddCard(event.target.value, "text");
+                    }}
+                  />
+                </CardContent>
+              </Card>
+            </DialogContent>
+          </>
+        )}
+
         <DialogActions>
-          <Button onClick={() => handleAddCard()} color="primary">
+          <Button
+            onClick={() => {
+              if (isCheckClickButton === "Add") {
+                handleAddCard();
+              } else {
+              }
+            }}
+            color="primary"
+          >
             Lưu
           </Button>
           <Button onClick={() => setOpen(!open)} color="primary">

@@ -48,8 +48,6 @@ const useStyles = makeStyles((theme) => ({
       width: theme.spacing(8),
       height: theme.spacing(8),
     },
-
-    color: "#f5f5f5",
   },
   iconsSize: {
     [theme.breakpoints.down("sm")]: {

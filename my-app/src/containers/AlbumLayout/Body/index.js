@@ -8,7 +8,6 @@ import AddIcon from "@material-ui/icons/Add";
 import BodyTop from "./BodyTop/BodyTop";
 import DialogAddCard from "./BodyCenter/Dialog/DialogAddCard";
 import BodyCenter from "./BodyCenter/BodyCenter";
-import DataCard from "../../../datacard/data.json";
 import ListImage from "./BodyCenter/BodyImage/ListImage";
 const useStyles = makeStyles((theme) => ({
   extendedIcon: {
@@ -79,7 +78,7 @@ export default function BodyAlbum() {
     img: "",
     title: "",
     text: "",
-    id: DataCard.length + 1,
+    id: arr.length + 1,
   };
 
   const handleAddCard = () => {
@@ -104,11 +103,11 @@ export default function BodyAlbum() {
       </Grid>
       <Grid item xs={12}>
         {isClick === true ? (
-          <Typography align="right" component="div" className={classes.div}>
+          <Typography align="right" component="span" className={classes.div}>
             <Button
               color="secondary"
               variant="contained"
-              onClick={handleClickAddCard}
+              onClick={() => handleClickAddCard()}
             >
               <AddIcon className={classes.extendedIcon} />
               Add Card
@@ -147,9 +146,9 @@ export default function BodyAlbum() {
         <DialogAddCard
           open={open}
           setOpen={setOpen}
-          handleClickAddCard={handleClickAddCard}
           newData={newData}
           handleAddCard={handleAddCard}
+          isCheckClickButton="Add"
         />
       )}
     </Grid>
