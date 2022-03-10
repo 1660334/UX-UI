@@ -71,10 +71,12 @@ export default function ImgMediaCard(props) {
     handleSaveDataEditCard,
   } = props;
   const [images, setImages] = useState(null);
-
+  const [isChangeData, setIsChangeData] = useState(false);
   const classes = useStyles();
   const [imageEdit, setImageEdit] = useState(null);
   const [hover, setHover] = useState(false);
+  const [isCheckTitleNull, setIsCheckTitleNull] = useState(null);
+  const [isCheckTextNull, setIsCheckTextNull] = useState(null);
 
   const handleMouseIn = () => {
     setHover(true);
@@ -83,7 +85,44 @@ export default function ImgMediaCard(props) {
   const handleMouseOut = () => {
     setHover(false);
   };
-
+  const handleCheckTitleNull = (data) => {
+    if (isCheckClickButton === "Add") {
+      if (data !== "") {
+        handleDataAddCard(data, "title");
+        setIsCheckTitleNull(false);
+      } else {
+        setIsChangeData(false);
+        setIsCheckTitleNull(true);
+      }
+    } else {
+      if (data !== "") {
+        handleDataAddCard(data, "title");
+        setIsCheckTitleNull(false);
+      } else {
+        setIsChangeData(false);
+        setIsCheckTitleNull(true);
+      }
+    }
+  };
+  const handleCheckTextNull = (data) => {
+    if (isCheckClickButton === "Add") {
+      if (data !== "") {
+        handleDataAddCard(data, "text");
+        setIsCheckTextNull(false);
+      } else {
+        setIsChangeData(false);
+        setIsCheckTextNull(true);
+      }
+    } else {
+      if (data !== "") {
+        handleDataAddCard(data, "text");
+        setIsCheckTextNull(false);
+      } else {
+        setIsChangeData(false);
+        setIsCheckTextNull(true);
+      }
+    }
+  };
   const hanldeDataUrlImg = (url) => {
     if (isCheckClickButton === "Add") {
       var data = URL.createObjectURL(url.target.files[0]);
@@ -111,6 +150,9 @@ export default function ImgMediaCard(props) {
         console.log("data", data);
         newData.text = data;
       }
+      if (newData.img !== "" && newData.title !== "" && newData.text !== "") {
+        setIsChangeData(true);
+      } else setIsChangeData(false);
       console.log("newData", newData);
     } else {
       if (data !== "" && type === "img") {
@@ -125,8 +167,9 @@ export default function ImgMediaCard(props) {
         console.log("data", data);
         newDataEditCard.text = data;
       }
-
-      console.log("newDataEditCard", newDataEditCard);
+      if (data.img !== "" || data.title !== "" || data.text !== "") {
+        setIsChangeData(true);
+      } else setIsChangeData(false);
     }
   };
   return (
@@ -192,18 +235,22 @@ export default function ImgMediaCard(props) {
                   <TextField
                     label="Tiêu đề"
                     type="text"
+                    error={isCheckTitleNull}
+                    helperText={isCheckTitleNull && "Vui lòng nhập tiêu đề!"}
                     fullWidth
                     className={classes.field}
                     onChange={(event, data) => {
-                      handleDataAddCard(event.target.value, "title");
+                      handleCheckTitleNull(event.target.value);
                     }}
                   />
                   <TextField
                     label="Nội dung"
                     type="text"
+                    error={isCheckTextNull}
+                    helperText={isCheckTextNull && "Vui lòng nhập Nội dung!"}
                     fullWidth
                     onChange={(event, data) => {
-                      handleDataAddCard(event.target.value, "text");
+                      handleCheckTextNull(event.target.value);
                     }}
                   />
                 </CardContent>
@@ -249,22 +296,26 @@ export default function ImgMediaCard(props) {
                 </CardActionArea>
                 <CardContent>
                   <TextField
+                    error={isCheckTitleNull}
+                    helperText={isCheckTitleNull && "Vui lòng nhập tiêu đề"}
                     label="Tiêu đề"
                     type="text"
                     defaultValue={getDataEdit.title}
                     fullWidth
                     className={classes.field}
                     onChange={(event, data) => {
-                      handleDataAddCard(event.target.value, "title");
+                      handleCheckTitleNull(event.target.value);
                     }}
                   />
                   <TextField
                     label="Nội dung"
                     type="text"
+                    error={isCheckTextNull}
+                    helperText={isCheckTextNull && "Vui lòng nhập nội dung"}
                     defaultValue={getDataEdit.text}
                     fullWidth
                     onChange={(event, data) => {
-                      handleDataAddCard(event.target.value, "text");
+                      handleCheckTextNull(event.target.value, "text");
                     }}
                   />
                 </CardContent>
@@ -274,19 +325,24 @@ export default function ImgMediaCard(props) {
         )}
 
         <DialogActions>
-          <Button
-            onClick={() => {
-              if (isCheckClickButton === "Add") {
-                handleAddCard();
-              } else {
-                console.log("đã vào đây");
-                handleSaveDataEditCard(getDataEdit.id);
-              }
-            }}
-            color="primary"
-          >
-            Lưu
-          </Button>
+          {isChangeData === true ? (
+            <Button
+              onClick={() => {
+                if (isCheckClickButton === "Add") {
+                  handleAddCard();
+                } else {
+                  console.log("đã vào đây");
+                  handleSaveDataEditCard(getDataEdit.id);
+                }
+              }}
+              color="primary"
+            >
+              Lưu
+            </Button>
+          ) : (
+            <Button disabled>Lưu</Button>
+          )}
+
           <Button onClick={() => setOpen(!open)} color="primary">
             Đóng
           </Button>
