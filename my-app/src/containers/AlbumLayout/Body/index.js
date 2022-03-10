@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { makeStyles, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
@@ -15,12 +15,11 @@ const useStyles = makeStyles((theme) => ({
   },
 
   div: {
-    position: "sticky",
-    top: "60%",
-    bottom: theme.spacing(2),
-    right: "85%",
-    zIndex: 5,
-    transform: "translate(-50, -50%)",
+    position: "fixed",
+    // left: 0,
+    right: 0,
+
+    zIndex: 2,
   },
   input: {
     display: "none",
@@ -31,7 +30,6 @@ export default function BodyAlbum() {
 
   const [arr, setArr] = useState([]);
   const [arrImage, setArrImage] = useState([]);
-
   const [open, setOpen] = useState(false);
   const [isClick, setIsClick] = useState(true);
   console.log("isClick", isClick);
@@ -42,7 +40,6 @@ export default function BodyAlbum() {
     setIsClick(false);
   };
   const handleClickAddCard = () => {
-    console.log("đã vào đây");
     setOpen(true);
   };
   // const newImage = {
@@ -69,8 +66,6 @@ export default function BodyAlbum() {
         }),
       ]);
     }
-
-    console.log(arrImage);
   };
 
   console.log("arrImage", arrImage);
@@ -103,18 +98,17 @@ export default function BodyAlbum() {
       </Grid>
       <Grid item xs={12}>
         {isClick === true ? (
-          <Typography align="right" component="span" className={classes.div}>
-            <Button
-              color="secondary"
-              variant="contained"
-              onClick={() => handleClickAddCard()}
-            >
-              <AddIcon className={classes.extendedIcon} />
-              Add Card
-            </Button>
-          </Typography>
+          <Button
+            className={classes.div}
+            color="primary"
+            variant="contained"
+            onClick={() => handleClickAddCard()}
+          >
+            <AddIcon className={classes.extendedIcon} />
+            Add Card
+          </Button>
         ) : (
-          <Typography align="right" component="div" className={classes.div}>
+          <Box className={classes.div}>
             <input
               accept="image/*"
               className={classes.input}
@@ -124,12 +118,12 @@ export default function BodyAlbum() {
               onChange={(url) => handleAddImages(url)}
             />
             <label htmlFor="contained-button-file">
-              <Button color="secondary" variant="contained" component="span">
+              <Button color="primary" variant="contained" component="span">
                 <AddIcon className={classes.extendedIcon} />
                 Upload
               </Button>
             </label>
-          </Typography>
+          </Box>
         )}
 
         <Container maxWidth="md">

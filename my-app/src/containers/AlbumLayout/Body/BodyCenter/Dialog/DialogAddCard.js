@@ -4,19 +4,23 @@ import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
-import PhotoCamera from "@material-ui/icons/PhotoCamera";
-import IconButton from "@material-ui/core/IconButton";
+
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-
+import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
+import EditIcon from "@material-ui/icons/Edit";
+import Fab from "@material-ui/core/Fab";
 
 const useStyles = makeStyles((theme) => ({
   media: {
     height: 200,
+    position: "relative",
   },
   icon: {
     color: "#2196f3",
@@ -32,6 +36,27 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     padding: theme.spacing(5),
   },
+  buttonimage: {
+    padding: "80px",
+    display: "flex",
+    textTransform: "none",
+  },
+  cardContent: {
+    paddingTop: theme.spacing(2),
+  },
+  typography: {
+    margin: theme.spacing(1),
+  },
+  editIcon: {
+    marginRight: theme.spacing(1),
+  },
+
+  fab: {
+    position: "absolute",
+    right: 0,
+    height: 40,
+    textTransform: "none",
+  },
 }));
 
 export default function ImgMediaCard(props) {
@@ -43,11 +68,22 @@ export default function ImgMediaCard(props) {
     isCheckClickButton,
     getDataEdit,
     newDataEditCard,
+    handleSaveDataEditCard,
   } = props;
   const [images, setImages] = useState(null);
 
   const classes = useStyles();
-  const [imageEdit, setImageEdit] = useState();
+  const [imageEdit, setImageEdit] = useState(null);
+  const [hover, setHover] = useState(false);
+
+  const handleMouseIn = () => {
+    setHover(true);
+  };
+
+  const handleMouseOut = () => {
+    setHover(false);
+  };
+
   const hanldeDataUrlImg = (url) => {
     if (isCheckClickButton === "Add") {
       var data = URL.createObjectURL(url.target.files[0]);
@@ -75,7 +111,6 @@ export default function ImgMediaCard(props) {
         console.log("data", data);
         newData.text = data;
       }
-
       console.log("newData", newData);
     } else {
       if (data !== "" && type === "img") {
@@ -106,30 +141,54 @@ export default function ImgMediaCard(props) {
             <DialogTitle id="form-dialog-title">Add to Card</DialogTitle>
             <DialogContent>
               <Card>
-                <CardActionArea className={classes.area}>
-                  <CardMedia
-                    className={classes.media}
-                    image={images}
-                    title="Add link Image"
-                  >
-                    <input
-                      className={classes.input}
-                      id="icon-button-file"
-                      type="file"
-                      onChange={(url) => hanldeDataUrlImg(url)}
-                    />
-                    <label htmlFor="icon-button-file">
-                      <IconButton
-                        color="primary"
-                        component="span"
-                        aria-label="upload picture"
-                      >
-                        <PhotoCamera className={classes.icon} />
-                      </IconButton>
-                    </label>
-                  </CardMedia>
-                </CardActionArea>
-                <CardContent>
+                <CardMedia
+                  className={classes.media}
+                  image={images}
+                  onMouseOver={handleMouseIn}
+                  onMouseLeave={handleMouseOut}
+                >
+                  <input
+                    className={classes.input}
+                    id="icon-button-file"
+                    type="file"
+                    onChange={(url) => hanldeDataUrlImg(url)}
+                  />
+                  <label htmlFor="icon-button-file">
+                    {images === null ? (
+                      <Button component="div" className={classes.buttonimage}>
+                        <Box
+                          display="flex"
+                          alignItems="center"
+                          flexDirection="column"
+                        >
+                          <AddAPhotoIcon />
+                          <Typography className={classes.typography}>
+                            Thêm ảnh
+                          </Typography>
+                        </Box>
+                      </Button>
+                    ) : (
+                      <div className={classes.div}>
+                        {hover && (
+                          <Fab
+                            variant="extended"
+                            component="span"
+                            className={classes.fab}
+                          >
+                            <EditIcon
+                              fontSize="small"
+                              className={classes.editIcon}
+                            />
+                            Chỉnh sửa
+                            {console.log("hover", hover)}
+                          </Fab>
+                        )}
+                      </div>
+                    )}
+                  </label>
+                </CardMedia>
+
+                <CardContent className={classes.cardContent}>
                   <TextField
                     label="Tiêu đề"
                     type="text"
@@ -159,7 +218,9 @@ export default function ImgMediaCard(props) {
                 <CardActionArea className={classes.area}>
                   <CardMedia
                     className={classes.media}
-                    image={getDataEdit.img}
+                    onMouseOver={handleMouseIn}
+                    onMouseLeave={handleMouseOut}
+                    image={imageEdit === null ? getDataEdit.img : imageEdit}
                     title="Edit link Image"
                   >
                     <input
@@ -169,13 +230,20 @@ export default function ImgMediaCard(props) {
                       onChange={(url) => hanldeDataUrlImg(url)}
                     />
                     <label htmlFor="icon-button-file">
-                      <IconButton
-                        color="primary"
-                        component="span"
-                        aria-label="upload picture"
-                      >
-                        <PhotoCamera className={classes.icon} />
-                      </IconButton>
+                      {hover && (
+                        <Fab
+                          variant="extended"
+                          component="span"
+                          className={classes.fab}
+                        >
+                          <EditIcon
+                            fontSize="small"
+                            className={classes.editIcon}
+                          />
+                          Chỉnh sửa
+                          {console.log("hover", hover)}
+                        </Fab>
+                      )}
                     </label>
                   </CardMedia>
                 </CardActionArea>
@@ -211,6 +279,8 @@ export default function ImgMediaCard(props) {
               if (isCheckClickButton === "Add") {
                 handleAddCard();
               } else {
+                console.log("đã vào đây");
+                handleSaveDataEditCard(getDataEdit.id);
               }
             }}
             color="primary"

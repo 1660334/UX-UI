@@ -48,8 +48,8 @@ export default function BodyTop(props) {
   const classes = useStyles();
   const { arr, setArr, setArrImage } = props;
   const [openDialogConfirmDelete, setOpenDialogConfirmDelete] = useState(false);
-  const [getIdDelete, setGetIdDelete] = useState([]);
-  const [getDataEdit, setGetDataEdit] = useState([]);
+  const [getIdDelete, setGetIdDelete] = useState();
+  const [getDataEdit, setGetDataEdit] = useState({});
   const [open, setOpen] = useState();
 
   useEffect(() => {
@@ -66,9 +66,9 @@ export default function BodyTop(props) {
   };
 
   const newDataEditCard = {
-    img: "",
-    title: "",
-    text: "",
+    img: getDataEdit.img,
+    title: getDataEdit.title,
+    text: getDataEdit.text,
     id: getDataEdit.id,
   };
   const handleClickEditCard = (data) => {
@@ -83,7 +83,20 @@ export default function BodyTop(props) {
     // arrData[index] = { ...data, isEdit: true };
     // setArr(arrData);
   };
-
+  const handleSaveDataEditCard = () => {
+    return arr.filter((item) => {
+      if (item.id === getDataEdit.id) {
+        console.log("đã vào đây nè bà con");
+        item.img = newDataEditCard.img;
+        item.title = newDataEditCard.title;
+        item.text = newDataEditCard.text;
+        console.log("arr", arr);
+        setArr(arr);
+        setOpen(false);
+      }
+      return setArr(arr);
+    });
+  };
   //sau khi click button xoá thì id dc truyền vào hàm setGetIdDelete để thay đổi giá trị biến getIdDelete
   //sau đó mở dialog xác nhận xoá lên
   const handleClickButtonDelete = (data) => {
@@ -154,6 +167,7 @@ export default function BodyTop(props) {
           setOpen={setOpen}
           getDataEdit={getDataEdit}
           newDataEditCard={newDataEditCard}
+          handleSaveDataEditCard={handleSaveDataEditCard}
           isCheckClickButton="Edit"
         />
       )}
