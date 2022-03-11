@@ -131,7 +131,7 @@ export default function BodyAlbum() {
             {isClick === true ? (
               <BodyCenter arr={arr} setArr={setArr} setArrImage={setArrImage} />
             ) : (
-              <ListImage arrImage={arrImage} />
+              <ListImage arrImage={arrImage} setArrImage={setArrImage} />
             )}
           </Box>
         </Container>

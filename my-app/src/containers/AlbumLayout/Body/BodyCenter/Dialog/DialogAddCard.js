@@ -71,12 +71,12 @@ export default function ImgMediaCard(props) {
     handleSaveDataEditCard,
   } = props;
   const [images, setImages] = useState(null);
-  const [isChangeData, setIsChangeData] = useState(false);
+  const [isChangeData, setIsChangeData] = useState(null);
   const classes = useStyles();
   const [imageEdit, setImageEdit] = useState(null);
   const [hover, setHover] = useState(false);
-  const [isCheckTitleNull, setIsCheckTitleNull] = useState(null);
-  const [isCheckTextNull, setIsCheckTextNull] = useState(null);
+  const [isCheckTitleNull, setIsCheckTitleNull] = useState(false);
+  const [isCheckTextNull, setIsCheckTextNull] = useState(false);
 
   const handleMouseIn = () => {
     setHover(true);
@@ -84,6 +84,23 @@ export default function ImgMediaCard(props) {
 
   const handleMouseOut = () => {
     setHover(false);
+  };
+  const handleCheckImageNull = (data) => {
+    if (isCheckClickButton === "Add") {
+      if (data !== "") {
+        hanldeDataUrlImg(data);
+      } else {
+        setIsChangeData(false);
+      }
+    } else {
+      if (data !== "") {
+        hanldeDataUrlImg(data);
+        setIsCheckTitleNull(false);
+      } else {
+        setIsChangeData(false);
+        setIsCheckTitleNull(true);
+      }
+    }
   };
   const handleCheckTitleNull = (data) => {
     if (isCheckClickButton === "Add") {
@@ -150,9 +167,9 @@ export default function ImgMediaCard(props) {
         console.log("data", data);
         newData.text = data;
       }
-      if (newData.img !== "" && newData.title !== "" && newData.text !== "") {
+      if (newData.img !== "" && newData.title !== "" && newData.text !== "")
         setIsChangeData(true);
-      } else setIsChangeData(false);
+      else setIsChangeData(false);
       console.log("newData", newData);
     } else {
       if (data !== "" && type === "img") {
@@ -167,9 +184,9 @@ export default function ImgMediaCard(props) {
         console.log("data", data);
         newDataEditCard.text = data;
       }
-      if (data.img !== "" || data.title !== "" || data.text !== "") {
+      if (data.img !== "" || data.title !== "" || data.text !== "")
         setIsChangeData(true);
-      } else setIsChangeData(false);
+      else setIsChangeData(false);
     }
   };
   return (
@@ -194,7 +211,7 @@ export default function ImgMediaCard(props) {
                     className={classes.input}
                     id="icon-button-file"
                     type="file"
-                    onChange={(url) => hanldeDataUrlImg(url)}
+                    onChange={(url) => handleCheckImageNull(url)}
                   />
                   <label htmlFor="icon-button-file">
                     {images === null ? (

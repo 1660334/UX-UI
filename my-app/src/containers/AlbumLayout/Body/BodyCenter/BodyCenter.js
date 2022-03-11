@@ -14,6 +14,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 import DialogEditCard from "./Dialog/DialogAddCard";
+import { Backdrop, Box } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,26 +39,66 @@ const useStyles = makeStyles((theme) => ({
   input: {
     display: "none",
   },
-  label: {
-    height: "100%",
+
+  cardactions: {
+    justifyContent: "flex-end",
+  },
+  cardcontent: {
+    padding: theme.spacing(1),
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: "#fff",
+  },
+  imgbackdrop: {
     width: "100%",
-    padding: theme.spacing(5),
+    height: "400px",
+  },
+  boxBackdrop: {
+    position: "relative",
+  },
+  typobackdrop: {
+    backgroundColor: "#212121",
+    position: "absolute",
+    width: "100%",
+
+    opacity: 0.9,
+    bottom: 0,
   },
 }));
 export default function BodyTop(props) {
   const classes = useStyles();
+  //Lấy dữ liệu từ các props của cpmponent Cha
   const { arr, setArr, setArrImage } = props;
+  //State Hook để mở dialog xác nhận trước khi xoá
   const [openDialogConfirmDelete, setOpenDialogConfirmDelete] = useState(false);
+  //Khai báo biến getIdDelete useState để lưu Id khi click và hàm setGetIdDelete để thay đổi biến id
   const [getIdDelete, setGetIdDelete] = useState();
+  //useState với nhiêm vụ lưu data của card đang click vào biến
   const [getDataEdit, setGetDataEdit] = useState({});
+  //useSate với nhoeemj vụ mở dialog change card
   const [open, setOpen] = useState();
+  //useState với nhiệm vụ mở và đống backdrop
+  const [openBackdrop, setOpenBackdrop] = useState(false);
+  const [getDataCardBackdrop, setGetDataCardBackdrop] = useState([]);
+
+  console.log("getDataCardBackdrop", getDataCardBackdrop);
+  const handleClose = () => {
+    setOpenBackdrop(false);
+  };
+  const handleToggle = (data) => {
+    setGetDataCardBackdrop(data);
+
+    setOpenBackdrop(!open);
+  };
 
   useEffect(() => {
-    // setArr(DataCard.map((item) => ({ ...item, isEdit: false })));
     //truyền data từ file .json cho hàm setArr để thay đổi giá trị biến arr ban đầu khi reload
     setArrImage(DataImage);
     setArr(DataCard);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  //function thực hiện nhiệm lụ xoá khi đã được gọi với data là id ta truyền vào
   const handleGetDataDelete = (data) => {
     console.log("data", data);
     const newCard = arr.filter((item) => item.id !== data);
@@ -65,12 +106,15 @@ export default function BodyTop(props) {
     setArr(newCard);
   };
 
+  //object lưu data sửa đổi khi thoả điều kiện
   const newDataEditCard = {
     img: getDataEdit.img,
     title: getDataEdit.title,
     text: getDataEdit.text,
     id: getDataEdit.id,
   };
+
+  //function mở dialog Edit và truyền data card vừa chọn để edit vào biến getDâtEdit
   const handleClickEditCard = (data) => {
     setOpen(true);
     setGetDataEdit(data);
@@ -83,6 +127,8 @@ export default function BodyTop(props) {
     // arrData[index] = { ...data, isEdit: true };
     // setArr(arrData);
   };
+
+  //function xử lý Lưu data vừa sửa dổi khi đã ấn button lưu
   const handleSaveDataEditCard = () => {
     return arr.filter((item) => {
       if (item.id === getDataEdit.id) {
@@ -108,7 +154,7 @@ export default function BodyTop(props) {
       {arr.map((item) => (
         <Grid item xs={12} sm={6} md={4} key={item.id}>
           <Card className={classes.root}>
-            <CardActionArea>
+            <CardActionArea onClick={() => handleToggle(item)}>
               <CardMedia title="Contemplative Reptile">
                 <img
                   src={item.img}
@@ -116,7 +162,7 @@ export default function BodyTop(props) {
                   alt="some value"
                 />
               </CardMedia>
-              <CardContent>
+              <CardContent className={classes.cardcontent}>
                 <Typography gutterBottom variant="h5" component="h2">
                   {item.title}
                 </Typography>
@@ -131,7 +177,7 @@ export default function BodyTop(props) {
               </CardContent>
             </CardActionArea>
 
-            <CardActions>
+            <CardActions className={classes.cardactions}>
               <IconButton
                 aria-label="edit"
                 color="primary"
@@ -153,6 +199,34 @@ export default function BodyTop(props) {
           </Card>
         </Grid>
       ))}
+      <Backdrop
+        className={classes.backdrop}
+        open={openBackdrop}
+        onClick={handleClose}
+      >
+        <div className={classes.boxBackdrop}>
+          <img
+            src={getDataCardBackdrop.img}
+            alt="aloalo"
+            className={classes.imgbackdrop}
+          />
+          <Box className={classes.typobackdrop}>
+            <Typography
+              fullWidth
+              variant="h5"
+              color="inherit"
+              component={"div"}
+              gutterBottom
+              style={{ color: "#fafafa" }}
+            >
+              <b>{getDataCardBackdrop.title}</b>
+            </Typography>
+            <Typography variant="h6" component={"div"} fullWidth gutterBottom>
+              {getDataCardBackdrop.text}
+            </Typography>
+          </Box>
+        </div>
+      </Backdrop>
       {openDialogConfirmDelete && (
         <DialogCinfirmDeleteCard
           openDialogConfirmDelete={openDialogConfirmDelete}

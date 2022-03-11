@@ -2,15 +2,17 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
+import CardActions from "@material-ui/core/CardActionArea";
 import CardMedia from "@material-ui/core/CardMedia";
 import Backdrop from "@material-ui/core/Backdrop";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import CloseIcon from "@material-ui/icons/Close";
 import Fab from "@material-ui/core/Fab";
-import { Box } from "@material-ui/core";
+import Box from "@material-ui/core/Box";
+import DeleteForeverSharpIcon from "@material-ui/icons/DeleteForeverSharp";
 import IconButton from "@material-ui/core/IconButton";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     "&:hover": {
@@ -18,14 +20,14 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   media: {
-    height: 300,
+    height: 350,
     width: "100%",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
   },
   card: {
-    height: 300,
+    height: 350,
   },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
@@ -92,10 +94,18 @@ const useStyles = makeStyles((theme) => ({
   div: {
     position: "relative",
   },
+  icondelete: {
+    position: "absolute",
+    right: 0,
+    zIndex: 5,
+  },
+  box: {
+    width: "100%",
+  },
 }));
 export default function ListImage(props) {
   const classes = useStyles();
-  const { arrImage } = props;
+  const { arrImage, setArrImage } = props;
   const [openBackdrop, setOpenBackdrop] = useState(false);
   const [getImg, setGetImg] = useState();
   const [getId, setGetId] = useState();
@@ -107,6 +117,10 @@ export default function ListImage(props) {
     setGetId(data.id);
     setGetImg(data.img);
     setOpenBackdrop(!openBackdrop);
+  };
+  const handleClickDeleteImage = (data) => {
+    const newImage = arrImage.filter((item) => item.id !== data);
+    setArrImage(newImage);
   };
   useEffect(() => {
     console.log("getId sau khi click", getId);
@@ -121,16 +135,26 @@ export default function ListImage(props) {
     <Grid container spacing={2}>
       {arrImage.map((item) => (
         <Grid item xs={12} sm={6} md={4} key={item.id}>
-          <Card className={classes.root} onClick={() => handleToggle(item)}>
-            <CardActionArea className={classes.card}>
-              <CardMedia title="Contemplative Reptile">
+          <Card className={classes.root}>
+            <CardActions component="div" className={classes.card}>
+              <IconButton
+                className={classes.icondelete}
+                onClick={() => handleClickDeleteImage(item.id)}
+              >
+                <DeleteForeverSharpIcon color="secondary" />
+              </IconButton>
+
+              <CardMedia
+                title="Contemplative Reptile"
+                onClick={() => handleToggle(item)}
+              >
                 <img
                   src={item.img}
                   className={classes.media}
                   alt="some value"
                 />
               </CardMedia>
-            </CardActionArea>
+            </CardActions>
           </Card>
         </Grid>
       ))}
