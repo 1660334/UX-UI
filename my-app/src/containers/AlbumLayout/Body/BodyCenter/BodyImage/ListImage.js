@@ -12,6 +12,8 @@ import Fab from "@material-ui/core/Fab";
 import Box from "@material-ui/core/Box";
 import DeleteForeverSharpIcon from "@material-ui/icons/DeleteForeverSharp";
 import IconButton from "@material-ui/core/IconButton";
+import { Button, Typography } from "@material-ui/core";
+import RestoreIcon from "@material-ui/icons/Restore";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -109,6 +111,34 @@ export default function ListImage(props) {
   const [openBackdrop, setOpenBackdrop] = useState(false);
   const [getImg, setGetImg] = useState();
   const [getId, setGetId] = useState();
+  const [isClickRecently, setIsClickRecently] = useState(false);
+  const [indexImage, setIndexImage] = useState([]);
+  console.log("indexImage", indexImage);
+  console.log("arrImageádasdasdasd", arrImage);
+  //function set click button Rêcntly
+  const handleClickRecently = () => {
+    setIsClickRecently(true);
+  };
+  //function xử lý khi click button TRỞ VỀ
+  const handleClickComeback = () => {
+    // arrImage.sort(function (a, b) {
+    //   return a.id - b.id;
+    // });
+
+    setIsClickRecently(false);
+  };
+  //restore image function
+  const handleRestoreImage = (data) => {
+    console.log("dataRestore", data);
+    arrImage.splice(data.getIndex, 0, data);
+    arrImage.sort(function (a, b) {
+      return a.id - b.id;
+    });
+    console.log("arrImageádasdasdasd", arrImage);
+    // setArrImage([arrImage.length = data.getIndex, data]);
+    const newRecentlyArr = indexImage.filter((item) => item.id !== data.id);
+    setIndexImage(newRecentlyArr);
+  };
 
   const handleClose = () => {
     setOpenBackdrop(false);
@@ -118,8 +148,15 @@ export default function ListImage(props) {
     setGetImg(data.img);
     setOpenBackdrop(!openBackdrop);
   };
-  const handleClickDeleteImage = (data) => {
-    const newImage = arrImage.filter((item) => item.id !== data);
+  const handleClickDeleteImage = (data, index) => {
+    const a = { ...data, getIndex: data.id - 1 };
+    console.log("a", a);
+    setIndexImage((indexImage) => [...indexImage, a]);
+    // const d = [...imgRecentlyDeleted];
+    // d.push(data);
+    // setImgRecentlyDeleted(d);
+
+    const newImage = arrImage.filter((item) => item.id !== data.id);
     setArrImage(newImage);
   };
   useEffect(() => {
@@ -133,31 +170,72 @@ export default function ListImage(props) {
   }, [getId]); // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <Grid container spacing={2}>
-      {arrImage.map((item) => (
-        <Grid item xs={12} sm={6} md={4} key={item.id}>
-          <Card className={classes.root}>
-            <CardActions component="div" className={classes.card}>
-              <IconButton
-                className={classes.icondelete}
-                onClick={() => handleClickDeleteImage(item.id)}
-              >
-                <DeleteForeverSharpIcon color="secondary" />
-              </IconButton>
+      <Grid item xs={12}>
+        {isClickRecently === false ? (
+          <Typography align="right">
+            <Button variant="outlined" onClick={() => handleClickRecently()}>
+              Đã xoá gần đây
+            </Button>
+          </Typography>
+        ) : (
+          <Typography align="right">
+            <Button variant="outlined" onClick={() => handleClickComeback()}>
+              trở về
+            </Button>
+          </Typography>
+        )}
+      </Grid>
+      {isClickRecently === false
+        ? arrImage.map((item, index) => (
+            <Grid item xs={12} sm={6} md={4} key={item.id}>
+              <Card className={classes.root}>
+                <CardActions component="div" className={classes.card}>
+                  <IconButton
+                    className={classes.icondelete}
+                    onClick={() => handleClickDeleteImage(item, index)}
+                  >
+                    <DeleteForeverSharpIcon color="secondary" />
+                  </IconButton>
 
-              <CardMedia
-                title="Contemplative Reptile"
-                onClick={() => handleToggle(item)}
-              >
-                <img
-                  src={item.img}
-                  className={classes.media}
-                  alt="some value"
-                />
-              </CardMedia>
-            </CardActions>
-          </Card>
-        </Grid>
-      ))}
+                  <CardMedia
+                    title="Contemplative Reptile"
+                    onClick={() => handleToggle(item)}
+                  >
+                    <img
+                      src={item.img}
+                      className={classes.media}
+                      alt="some value"
+                    />
+                  </CardMedia>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))
+        : indexImage.map((item) => (
+            <Grid item xs={12} sm={6} md={4} key={item.id}>
+              <Card className={classes.root}>
+                <CardActions component="div" className={classes.card}>
+                  <IconButton
+                    className={classes.icondelete}
+                    onClick={() => handleRestoreImage(item)}
+                  >
+                    <RestoreIcon />
+                  </IconButton>
+
+                  <CardMedia
+                    title="Contemplative Reptile"
+                    onClick={() => handleToggle(item)}
+                  >
+                    <img
+                      src={item.img}
+                      className={classes.media}
+                      alt="some value"
+                    />
+                  </CardMedia>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
 
       <Backdrop className={classes.backdrop} open={openBackdrop}>
         <Fab

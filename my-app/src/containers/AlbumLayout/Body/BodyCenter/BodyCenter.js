@@ -212,7 +212,7 @@ export default function BodyTop(props) {
           />
           <Box className={classes.typobackdrop}>
             <Typography
-              fullWidth
+              // fullWidth
               variant="h5"
               color="inherit"
               component={"div"}
@@ -221,7 +221,12 @@ export default function BodyTop(props) {
             >
               <b>{getDataCardBackdrop.title}</b>
             </Typography>
-            <Typography variant="h6" component={"div"} fullWidth gutterBottom>
+            <Typography
+              variant="h6"
+              component={"div"}
+              // fullWidth
+              gutterBottom
+            >
               {getDataCardBackdrop.text}
             </Typography>
           </Box>
