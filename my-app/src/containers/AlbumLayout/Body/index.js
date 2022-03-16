@@ -32,12 +32,16 @@ export default function BodyAlbum() {
   const [arrImage, setArrImage] = useState([]);
   const [open, setOpen] = useState(false);
   const [isClick, setIsClick] = useState(true);
+  const [isCheckClick, setIsCheckClick] = useState(false);
+
   console.log("isClick", isClick);
   const handleClickButtonCard = () => {
     setIsClick(true);
+    setIsCheckClick(false);
   };
   const handleClickButtonImage = () => {
     setIsClick(false);
+    setIsCheckClick(true);
   };
   const handleClickAddCard = () => {
     setOpen(true);
@@ -90,6 +94,7 @@ export default function BodyAlbum() {
         <Container maxWidth="sm">
           <Box pt={8} pb={4}>
             <BodyTop
+              isCheckClick={isCheckClick}
               handleClickButtonCard={handleClickButtonCard}
               handleClickButtonImage={handleClickButtonImage}
             />

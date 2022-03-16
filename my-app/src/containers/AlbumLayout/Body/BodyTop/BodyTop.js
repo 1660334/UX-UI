@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function BodyTop(props) {
   const classes = useStyles();
-  const { handleClickButtonCard, handleClickButtonImage } = props;
+  const { handleClickButtonCard, handleClickButtonImage, isCheckClick } = props;
 
   return (
     <Box>
@@ -30,24 +30,50 @@ export default function BodyTop(props) {
         simply skip over it entirely.
       </Typography>
       <Grid container spacing={2} justifyContent="center">
-        <Grid item>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => handleClickButtonCard()}
-          >
-            ALBUM CARD
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => handleClickButtonImage()}
-          >
-            ALBUM IMAGES
-          </Button>
-        </Grid>
+        {isCheckClick === false ? (
+          <Grid item>
+            <Button
+              disabled
+              variant="contained"
+              color="primary"
+              onClick={() => handleClickButtonCard()}
+            >
+              ALBUM CARD
+            </Button>
+          </Grid>
+        ) : (
+          <Grid item>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleClickButtonCard()}
+            >
+              ALBUM CARD
+            </Button>
+          </Grid>
+        )}
+        {isCheckClick === true ? (
+          <Grid item>
+            <Button
+              disabled
+              variant="contained"
+              color="primary"
+              onClick={() => handleClickButtonImage()}
+            >
+              ALBUM IMAGES
+            </Button>
+          </Grid>
+        ) : (
+          <Grid item>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleClickButtonImage()}
+            >
+              ALBUM IMAGES
+            </Button>
+          </Grid>
+        )}
       </Grid>
     </Box>
   );
